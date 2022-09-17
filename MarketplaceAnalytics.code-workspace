@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "MarketplaceAnalytics"
+		},
+		{
+			"path": "MarketplaceAnalytics.Schema"
+		}
+	],
+	"settings": {
+		"debug.internalConsoleOptions": "neverOpen"
+	}
+}
