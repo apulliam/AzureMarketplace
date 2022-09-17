@@ -1,4 +1,4 @@
-USE [AdventureWorksLT2012]
+USE [AzureMarketplace]
 GO
 
 SET ANSI_NULLS ON

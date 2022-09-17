@@ -29,7 +29,7 @@ namespace MsftGps.MarketplaceAnalytics
             // Note callback does not work for executenow reports (observed behavior)
             var report = new AnalyticsReport()
             {
-                ReportName = $"query-{queryId}-report",
+                ReportName = $"query_{queryId}_report",
                 QueryId = queryId,
                 ExecuteNow = true,
                 CallbackUrl = $"{urlBaseAddress}/api/reportcallback",
@@ -64,7 +64,7 @@ namespace MsftGps.MarketplaceAnalytics
         public async Task GetReportData([QueueTrigger("report-execution", Connection = "AnalyticsQueueStorage")]string myQueueItem, ILogger log)
         {
            
-            var reportId = JsonConvert.DeserializeObject<string>(myQueueItem);
+            var reportId = myQueueItem;
 
             var response = await _analyticsService.GetReportExecutions(reportId!);
 
