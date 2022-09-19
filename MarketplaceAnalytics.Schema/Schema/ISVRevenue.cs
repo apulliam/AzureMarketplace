@@ -1,6 +1,6 @@
 namespace MsftGps.MarketplaceAnalytics.Schema
 {
-    public class RevenueDetails
+    public class ISVRevenue
     { 
         // An identifier for the software assets. Same as the order id in the orders report in Partner Center.
         public string? AssetId { get; set; }	

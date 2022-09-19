@@ -70,7 +70,7 @@ namespace MsftGps.AnalyticsTest
             }
         }
 
-        public async Task RunReport(string datasetName, string timespan)
+        public async Task<AnalyticsQuery> CreateQuery(string datasetName, string timespan)
         {
             HttpResponseMessage httpResponseMessage;
             AnalyticsQuery? query;
@@ -92,10 +92,11 @@ namespace MsftGps.AnalyticsTest
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {
                     Console.WriteLine($"Error creating query: {await httpResponseMessage.Content.ReadAsStringAsync()}");
-                    return;
+                    return null;
                 }
-                query = await httpResponseMessage.Content.ReadFromJsonAsync<AnalyticsQuery>()!;
-                Debug.WriteLine($"Created new query {query!.Name}");
+                var response = await httpResponseMessage.Content.ReadFromJsonAsync<AnalyticsResponse<AnalyticsQuery>>()!;
+
+                Debug.WriteLine($"Created new query {response!.Value!.FirstOrDefault()!.Name}");
             }
             else
             {
@@ -104,10 +105,16 @@ namespace MsftGps.AnalyticsTest
                 query = queryResponse!.Value!.FirstOrDefault();
                 Debug.WriteLine($"Retrieved query {query!.Name}");
             }
-            httpResponseMessage = await _httpClient.PostAsync($"runreport/{query!.QueryId}", null);
-             if (!httpResponseMessage.IsSuccessStatusCode)
+            return query;
+        }
+
+        public async Task RunReport(AnalyticsQuery query)
+        {
+            var httpResponseMessage = await _httpClient.PostAsync($"runreport/{query!.QueryId}", null);
+            if (!httpResponseMessage.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Error running report: {await httpResponseMessage.Content.ReadAsStringAsync()}");
+                var analyticsServiceMessage = await httpResponseMessage.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error running report for query {query.QueryId}: {httpResponseMessage.ReasonPhrase} {analyticsServiceMessage}");
                 return;
             }
             Debug.WriteLine($"Running report for query {query.Name}");
@@ -123,7 +130,8 @@ namespace MsftGps.AnalyticsTest
             cleanupTask = CleanupQueries();
             cleanupTask.Wait();
 
-            await RunReport("ISVOrder", "LIFETIME");
+            var query = await CreateQuery("ISVMarketplaceInsights", "LIFETIME");
+            await RunReport(query);
         }
     }
 }

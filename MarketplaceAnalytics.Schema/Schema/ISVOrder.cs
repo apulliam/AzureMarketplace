@@ -36,7 +36,7 @@ namespace MsftGps.MarketplaceAnalytics.Schema
         public string? IsPreviewSKU { get; set; }
     
         // The unique identifier of the customer order for your commercial marketplace service. Virtual Machine usage-based offers are not associated with an order.
-        public string? AssetId { get; set; }
+        public Guid? AssetId { get; set; }
     
         // Number of assets associated with the order ID for active orders
         public int Quantity { get; set; }
@@ -52,8 +52,7 @@ namespace MsftGps.MarketplaceAnalytics.Schema
         // Canceled: Subscription of an asset is canceled by customer
         // Expired: Subscription for an offer expired in the system automatically post trial period
         // Abandoned: Indicates a system error during offer creation or subscription fulfillment was not completed
-        // Warning:
-        // Subscription order is still active but customer has defaulted in payments
+        // Warning: Subscription order is still active but customer has defaulted in payments
         public string? OrderStatus { get; set; }
     
         // The date the commercial marketplace order was canceled.

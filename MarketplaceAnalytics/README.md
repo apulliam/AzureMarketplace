@@ -1,25 +1,49 @@
-This repo is designed to demonstrate (and simplify) the Azure Marketplace Analytics API's.
+This file contains notes on the Marketplace Analytics documention, including the API documentation, where the documentation has errors or omissions.  It also includes notes on API errors and inconsistencies.
 
-https://docs.microsoft.com/en-us/azure/marketplace/analytics-programmatic-access
-
-This repo will also include notes on the Marketplace Analytics documention, including the API's where the API documentation has errors, omissions or the API behaviors are inconsistent or just unhelpful.
+This will be converted into a proper readme as the project nears the first release.
 
 The Marketplace Analytics API's are accessed at the endpoint:
 https://api.partnercenter.microsoft.com/insights/v1/cmp/
 
-There are 3 groups of service off this root endpoint for
+There are 4 groups of services off this root endpoint for
 
-DataSets
-Queries
-Reports
+ScheduledDataSet - GET All, GET by Name
+ScheduledQueries - POST; GET All, Get by ID, Get by Name, Get System; DELETE by ID
+ScheduledReport - GET All/ID/Name, POST, PUT ID, DELETE ID
+SchedulerReport/exececutions - GET/ID
+
+All API calls require an Azure AD bearer token for authentication via a tenant associated with the Partner Center account.  Note that a Partner Center account can have multiple Azure AD tenant associations.
+
+The setup requires two steps:
+1. Create an App Registration in the ISV tenant, and create a client secret to support the OAuth2 client credentials flow.
+2. Register the App Registration in Partner Center and assign the appropriate access level.  For testing with Manager (Windows) access level was used.
+
+The sample code shows how to obtain a bearer token from Azure using the Microsoft Authentication Library, which is available for most programming languages.
+
+The Analytics API's require a token for the scope https://graph.windows.net/.default.  This corresponds to the deprecated Azure AD Graph API's, so the Analytics API's should be updated to also accept the current Microsoft Graph endpoint https://graph.microsoft.com/.default.
+
+The basic flow is 
+1. Get DataSets (optional)
+1. Create a Custom Query  This step is (optional as system queries are always available)
+
+
+The ISVOfferRetention has two metric (which appear to be calculated columms) which have parenthesis which is not accepted by the API's"
+    "RevenueGenerated(USD)",
+    "RevenueGeneratedPerDay(USD)"
 
 
 Scheduled start time must be at least four hours in future
-Report webhook is not executed for Execute now reports
+
 ExecuteNow reports cannot be updated
-ExecuteNow reports can only be executed once and must be deleted for cleanup
+
+ExecuteNow reports can only be executed once, but like all report executions, must be deleted to cleanup files in Azure blob storage
+
 ReportName should not contain spaces as its used as part of the name of the CSV file
+
 executionStatus flag does not work. ; separator returns bad request , doesn't find filter matches
+
+ExecuteNow reports may take some time to execute. It appear they are being submitted to a queue. The execution time can be determined by comparing the startTime field in the CreateReport call with the reportGeneratedTime in the GetReportExececutions call.
+
 
   {
       "reportId": "70ec57fa-da22-4641-9492-86a2bfbbc30e",
@@ -58,3 +82,5 @@ executionStatus flag does not work. ; separator returns bad request , doesn't fi
       "reportExpiryTime": null,
       "reportGeneratedTime": "2022-09-16T17:20:48Z"
     }
+
+    

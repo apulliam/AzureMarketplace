@@ -1,6 +1,6 @@
 namespace MsftGps.MarketplaceAnalytics.Schema
 {
-    public class CustomerDetails
+    public class ISVCustomer
     {
         // The unique identifier associated with the Azure subscription the customer used to purchase your commercial marketplace offer.
         // For infrastructure offers, this is the customer's Azure subscription GUID. For SaaS offers, this is shown as zeros since SaaS
@@ -69,10 +69,10 @@ namespace MsftGps.MarketplaceAnalytics.Schema
         // The Commerce Root Customer signifies the name of the subscription’s customer.
         public string? CommerceRootCustomer { get; set; }
         
-        // Customer ID	Customer ID	The unique identifier assigned to a customer. A customer may have zero or more Azure Marketplace subscriptions.
+        // The unique identifier assigned to a customer. A customer may have zero or more Azure Marketplace subscriptions.
         public string? CustomerId { get; set; }
 
-        // Billing Account ID	Billing Account ID	The identifier of the account on which billing is generated. Map Billing Account ID to customerID to connect your Payout Transaction Report with the Customer, Order, and Usage Reports.
+        // The identifier of the account on which billing is generated. Map Billing Account ID to customerID to connect your Payout Transaction Report with the Customer, Order, and Usage Reports.
         public string? BillingAccountId { get; set; }
         
         // The value of this field signifies the type of the customer. The possible values are:
@@ -85,7 +85,8 @@ namespace MsftGps.MarketplaceAnalytics.Schema
         
         // The display name of the plan entered when the offer was created in Partner Center
         public string? PlanId { get; set; }
-        // SKU	SKU	The plan associated with the offer
+        
+        // The plan associated with the offer
         public string? SKU { get; set; }
     }
 }

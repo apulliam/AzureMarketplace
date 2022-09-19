@@ -142,7 +142,7 @@ namespace MsftGps.AnalyticsTest
                 ISVMarketplaceInsights";
 
         public static string IsvRevenueSelectAll = @"
-            SELET 
+            SELECT 
                 AssetId,
                 SalesChannel,
                 BillingAccountId,
@@ -205,11 +205,9 @@ namespace MsftGps.AnalyticsTest
                 FirstUsageDate,
                 AzureLicenseType,
                 OfferType,
-                Offset
-                RevenueGenerated(USD),
-                RevenueGeneratedPerDay(USD) 
+                Offset  
             FROM 
-                ISVOrderRetention";
+                ISVOfferRetention";
 
         public static readonly string IsvQualityOfServiceSelectAll = @"
             SELECT 
